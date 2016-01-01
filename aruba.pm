@@ -479,22 +479,26 @@ sub WriteTerm {
 			/^mgmt-user (\S+) (\S+) (.*)$/ &&
 				ProcessHistory("USER","keysort","$1","!mgmt-user $1 $2 <removed>\n") && next;
 
-			#within redundancy-master settings
-			/^(\s+peer-ip-address \S+ ipsec )/ &&
-				ProcessHistory("","","","!$1<removed>\n") && next;
-
 			#within aaa-server details
 			/^(\s+key )[0-9a-f]{16,}/ &&
 				ProcessHistory("","","","!$1<removed>\n") && next;
 		}
 
 		if ($filter_pwds >= 1) {
-			#removing reversible passwords
+			#removing only reversible passwords
 			/^(\s+wpa-passphrase )/ &&
 				ProcessHistory("","","","!$1<removed>\n") && next;
 
 			#not editable, but we'll treat it like a password
 			/^(\s+arm-rf-domain-key )/ &&
+				ProcessHistory("","","","!$1<removed>\n") && next;
+
+			#within redundancy-master settings
+			/^(\s+peer-ip-address \S+ ipsec )/ &&
+				ProcessHistory("","","","!$1<removed>\n") && next;
+
+			#within vrrp
+			/^(\s+authentication )/ &&
 				ProcessHistory("","","","!$1<removed>\n") && next;
 
 			#stored in plain text!
