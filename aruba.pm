@@ -344,7 +344,7 @@ sub ParseVLANPorts {
 	my ($portspec, $base, $start, $end) = "";
 	my $i = 0;
 	foreach $portspec (@portlist) {
-		if ($portspec =~ /(.*?\/)(\d+)-(\d+)$/) {
+		if ($portspec =~ /(.*?\/?)(\d+)-(\d+)$/) {
 			$base = $1;
 			$start = $2;
 			$end = $3;
@@ -375,11 +375,11 @@ sub ShowVLAN {
 		return(1) if (/invalid input detected/i);
 		return(1) if (/do not have permission/i);
 
-		/AAA Profile$/ && ($has_aaa = 1) && next;
+		/AAA Profile$/ && ($has_aaa = 1);
 		/^VLAN CONFIG/ && next;
 		/^-+/ && next;
 
-		if (/^(VLAN  )(Description +)(Ports)$/) {
+		if (/^(VLAN  )(Description +)(Ports)/) {
 			#figure out width of the "Description" column; assume at least one space after
 			$len = length($2) - 1;
 		}
