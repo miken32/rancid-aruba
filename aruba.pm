@@ -50,6 +50,7 @@ require(Exporter);
 our @ISA = qw(Exporter);
 
 use rancid;
+use Sort::Naturally;
 
 @ISA = qw(Exporter rancid main);
 
