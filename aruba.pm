@@ -511,13 +511,15 @@ sub WriteTerm {
 
 			/^mgmt-user (\S+) (\S+) (.*)$/ &&
 				ProcessHistory("USER","keysort","$1","!mgmt-user $1 $2 <removed>\n") && next;
+        }
 
+		if ($filter_pwds >= 2 || $filter_osc >= 1) {
 			#within aaa-server details
 			/^(\s+key )[0-9a-f]{16,}/ &&
 				ProcessHistory("","","","!$1<removed>\n") && next;
 		}
 
-		if ($filter_pwds >= 1) {
+		if ($filter_pwds >= 1 || $filter_osc >= 1) {
 			#removing only reversible passwords
 			/^(\s+wpa-passphrase )/ &&
 				ProcessHistory("","","","!$1<removed>\n") && next;
@@ -533,6 +535,14 @@ sub WriteTerm {
 			#within vrrp
 			/^(\s+authentication )/ &&
 				ProcessHistory("","","","!$1<removed>\n") && next;
+            /^(\s+vrrp-id \d+ vrrp-passphrase )/ &&
+				ProcessHistory("","","","!$1<removed>\n") && next;
+
+			#AP console passwords
+			/^(\s+ap-console-password )/ &&
+				ProcessHistory("","","","!$1<removed>\n") && next;
+			/^(\s+bkup-passwords )/ &&
+				ProcessHistory("","","","!$1<removed>\n") && next;
 
 			#stored in plain text!
 			/^(ntp authentication-key \S+ md5 )/ &&
@@ -547,6 +557,14 @@ sub WriteTerm {
 				ProcessHistory("","","","!$1<removed>$2<removed>\n") && next;
 
 			/^(ap mesh-recovery-profile cluster \S+ wpa-hexkey )/ &&
+				ProcessHistory("","","","!$1<removed>\n") && next;
+
+            #clearpass radius
+			/^(\s+cppm username \S+ password )\S+/ &&
+				ProcessHistory("","","","!$1<removed>\n") && next;
+
+            # upgrade-profile
+			/^(\s+password )\S+/ &&
 				ProcessHistory("","","","!$1<removed>\n") && next;
 		}
 
