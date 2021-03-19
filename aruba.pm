@@ -100,7 +100,7 @@ TOP:
 			$cmd = $1;
 			if (!defined($prompt)) {
 				$prompt = ($_ =~ /^([^#>]+[#>])/)[0];
-				$prompt =~ s/([][}{)(\\])/\\$1/g;
+				$prompt =~ s/([][}{)(\\*])/\\$1/g;
 				print STDERR ("PROMPT MATCH: $prompt\n") if ($debug);
 			}
 			print STDERR ("HIT COMMAND:$_") if ($debug);
