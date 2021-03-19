@@ -259,6 +259,39 @@ sub ShowImageVersion {
     return(0);
 }
 
+# This routine parses "show whitelist"
+sub ShowWhitelist {
+	my($INPUT, $OUTPUT, $cmd) = @_;
+	my $sub_name = (caller(0))[3];
+	print STDERR "    In $sub_name: $_" if ($debug);
+
+	while (<$INPUT>) {
+		tr/\015//d;
+		last if (/^$prompt/);
+		return(1) if (/^\s*($cmd|\^)\s*$/);
+		return(1) if (/invalid input detected/i);
+		return(1) if (/do not have permission/i);
+		ProcessHistory("COMMENTS","keysort","G1","!$_");
+	}
+    return(0);
+}
+
+# This routine parses "show crashfino"
+sub ShowCrashinfo {
+	my($INPUT, $OUTPUT, $cmd) = @_;
+	my $sub_name = (caller(0))[3];
+	print STDERR "    In $sub_name: $_" if ($debug);
+
+	while (<$INPUT>) {
+		tr/\015//d;
+		last if (/^$prompt/);
+		return(1) if (/^\s*($cmd|\^)\s*$/);
+		return(1) if (/invalid input detected/i);
+		return(1) if (/do not have permission/i);
+		ProcessHistory("COMMENTS","keysort","G1","!$_");
+	}
+    return(0);
+}
 
 # This routine parses "dir"
 sub Dir {
