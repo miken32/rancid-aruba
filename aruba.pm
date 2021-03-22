@@ -259,6 +259,39 @@ sub ShowImageVersion {
     return(0);
 }
 
+# This routine parses "show whitelist"
+sub ShowWhitelist {
+	my($INPUT, $OUTPUT, $cmd) = @_;
+	my $sub_name = (caller(0))[3];
+	print STDERR "    In $sub_name: $_" if ($debug);
+
+	while (<$INPUT>) {
+		tr/\015//d;
+		last if (/^$prompt/);
+		return(1) if (/^\s*($cmd|\^)\s*$/);
+		return(1) if (/invalid input detected/i);
+		return(1) if (/do not have permission/i);
+		ProcessHistory("COMMENTS","keysort","G1","!$_");
+	}
+    return(0);
+}
+
+# This routine parses "show crashfino"
+sub ShowCrashinfo {
+	my($INPUT, $OUTPUT, $cmd) = @_;
+	my $sub_name = (caller(0))[3];
+	print STDERR "    In $sub_name: $_" if ($debug);
+
+	while (<$INPUT>) {
+		tr/\015//d;
+		last if (/^$prompt/);
+		return(1) if (/^\s*($cmd|\^)\s*$/);
+		return(1) if (/invalid input detected/i);
+		return(1) if (/do not have permission/i);
+		ProcessHistory("COMMENTS","keysort","G1","!$_");
+	}
+    return(0);
+}
 
 # This routine parses "dir"
 sub Dir {
@@ -478,13 +511,15 @@ sub WriteTerm {
 
 			/^mgmt-user (\S+) (\S+) (.*)$/ &&
 				ProcessHistory("USER","keysort","$1","!mgmt-user $1 $2 <removed>\n") && next;
+		}
 
+		if ($filter_pwds >= 2 || $filter_osc >= 1) {
 			#within aaa-server details
 			/^(\s+key )[0-9a-f]{16,}/ &&
 				ProcessHistory("","","","!$1<removed>\n") && next;
 		}
 
-		if ($filter_pwds >= 1) {
+		if ($filter_pwds >= 1 || $filter_osc >= 1) {
 			#removing only reversible passwords
 			/^(\s+wpa-passphrase )/ &&
 				ProcessHistory("","","","!$1<removed>\n") && next;
@@ -500,6 +535,14 @@ sub WriteTerm {
 			#within vrrp
 			/^(\s+authentication )/ &&
 				ProcessHistory("","","","!$1<removed>\n") && next;
+			/^(\s+vrrp-id \d+ vrrp-passphrase )/ &&
+				ProcessHistory("","","","!$1<removed>\n") && next;
+
+			#AP console passwords
+			/^(\s+ap-console-password )/ &&
+				ProcessHistory("","","","!$1<removed>\n") && next;
+			/^(\s+bkup-passwords )/ &&
+				ProcessHistory("","","","!$1<removed>\n") && next;
 
 			#stored in plain text!
 			/^(ntp authentication-key \S+ md5 )/ &&
@@ -514,6 +557,14 @@ sub WriteTerm {
 				ProcessHistory("","","","!$1<removed>$2<removed>\n") && next;
 
 			/^(ap mesh-recovery-profile cluster \S+ wpa-hexkey )/ &&
+				ProcessHistory("","","","!$1<removed>\n") && next;
+
+			#clearpass radius
+			/^(\s+cppm username \S+ password )\S+/ &&
+				ProcessHistory("","","","!$1<removed>\n") && next;
+
+			# upgrade-profile
+			/^(\s+password )\S+/ &&
 				ProcessHistory("","","","!$1<removed>\n") && next;
 		}
 
