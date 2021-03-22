@@ -511,7 +511,7 @@ sub WriteTerm {
 
 			/^mgmt-user (\S+) (\S+) (.*)$/ &&
 				ProcessHistory("USER","keysort","$1","!mgmt-user $1 $2 <removed>\n") && next;
-        }
+		}
 
 		if ($filter_pwds >= 2 || $filter_osc >= 1) {
 			#within aaa-server details
@@ -535,7 +535,7 @@ sub WriteTerm {
 			#within vrrp
 			/^(\s+authentication )/ &&
 				ProcessHistory("","","","!$1<removed>\n") && next;
-            /^(\s+vrrp-id \d+ vrrp-passphrase )/ &&
+			/^(\s+vrrp-id \d+ vrrp-passphrase )/ &&
 				ProcessHistory("","","","!$1<removed>\n") && next;
 
 			#AP console passwords
@@ -559,11 +559,11 @@ sub WriteTerm {
 			/^(ap mesh-recovery-profile cluster \S+ wpa-hexkey )/ &&
 				ProcessHistory("","","","!$1<removed>\n") && next;
 
-            #clearpass radius
+			#clearpass radius
 			/^(\s+cppm username \S+ password )\S+/ &&
 				ProcessHistory("","","","!$1<removed>\n") && next;
 
-            # upgrade-profile
+			# upgrade-profile
 			/^(\s+password )\S+/ &&
 				ProcessHistory("","","","!$1<removed>\n") && next;
 		}
