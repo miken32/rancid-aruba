@@ -1,0 +1,15 @@
+Makefile
+
+# ignore some dirs
+live/
+dev/
+contrib/
+test/
+
+# output of test runs:
+*.new
+*.raw
+
+# misc
+*.baseline
+

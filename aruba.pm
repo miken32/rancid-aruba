@@ -61,7 +61,7 @@ sub import {
 
 # post-open(collection file) initialization
 sub init {
-    # add content lines and separators
+	# add content lines and separators
 	ProcessHistory("","","","!RANCID-CONTENT-TYPE: $devtype\n!\n");
 	ProcessHistory("COMMENTS","keysort","A0","!\n");
 	ProcessHistory("COMMENTS","keysort","B0","!\n");
@@ -148,8 +148,8 @@ sub ShowVersion {
 
 		/^(\d+[gmk]) bytes of (.* flash)/i &&
 	    	ProcessHistory("COMMENTS","keysort","B2", "!Memory: $2 $1 bytes\n") && next;
-    }
-    return(0);
+	}
+	return(0);
 }
 
 # This routine parses "show master-redundancy"
@@ -178,8 +178,8 @@ sub ShowMasterRedundancy {
 		/^\s+?Peer's IPSEC Key is (.+)$/ &&
 			$filter_pwds >= 1 &&
 			ProcessHistory("COMMENTS","keysort","E3","!Redundancy: IPSEC key $1\n") && next;
-    }
-    return(0);
+	}
+	return(0);
 }
 
 # This routine parses "show interface transceivers"
@@ -188,7 +188,7 @@ sub ShowInterfaceTransceivers {
 	my $sub_name = (caller(0))[3];
 	print STDERR "    In $sub_name: $_" if ($debug);
 
-    my($int, $mfg, $sn, $pn, $typ);
+	my($int, $mfg, $sn, $pn, $typ);
 
 	while (<$INPUT>) {
 		tr/\015//d;
@@ -214,7 +214,7 @@ sub ShowInterfaceTransceivers {
 		/^Connector Type\s+:\s+(.*)$/ &&
 			($typ .= " $1") && next;
 	}
-    return(0);
+	return(0);
 }
 
 # This routine parses "show boot"
@@ -225,7 +225,7 @@ sub ShowBoot {
 
 	my ($file, $part) = "";
 
-    while (<$INPUT>) {
+	while (<$INPUT>) {
 		tr/\015//d;
 		last if (/^$prompt/);
 		return(1) if (/^\s*($cmd|\^)\s*$/);
@@ -237,8 +237,8 @@ sub ShowBoot {
 		/^Boot Partition: PARTITION (\d+)$/ &&
 			($part=$1) && next;
     }
-    ProcessHistory("COMMENTS","keysort","D3","!Boot: Partition$part:$file\n");
-    return(0);
+	ProcessHistory("COMMENTS","keysort","D3","!Boot: Partition$part:$file\n");
+	return(0);
 }
 
 
@@ -256,7 +256,7 @@ sub ShowImageVersion {
 		return(1) if (/do not have permission/i);
 		ProcessHistory("COMMENTS","keysort","D99","!$_");
 	}
-    return(0);
+	return(0);
 }
 
 # This routine parses "show whitelist"
@@ -273,7 +273,7 @@ sub ShowWhitelist {
 		return(1) if (/do not have permission/i);
 		ProcessHistory("COMMENTS","keysort","G1","!$_");
 	}
-    return(0);
+	return(0);
 }
 
 # This routine parses "show crashfino"
@@ -290,7 +290,7 @@ sub ShowCrashinfo {
 		return(1) if (/do not have permission/i);
 		ProcessHistory("COMMENTS","keysort","G1","!$_");
 	}
-    return(0);
+	return(0);
 }
 
 # This routine parses "dir"
@@ -310,7 +310,7 @@ sub Dir {
 			ProcessHistory("FLASH","","","!Flash: $2\n");
 	}
 	ProcessHistory("FLASH","","","!\n");
-    return(0);
+	return(0);
 }
 
 
@@ -320,7 +320,7 @@ sub ShowInventory {
 	my $sub_name = (caller(0))[3];
 	print STDERR "    In $sub_name: $_" if ($debug);
 
-    while (<$INPUT>) {
+	while (<$INPUT>) {
 		tr/\015//d;
 		last if (/^$prompt/);
 		return(1) if (/^\s*($cmd|\^)\s*$/);
@@ -332,9 +332,9 @@ sub ShowInventory {
 
 		/^((.*) (Serial|Assembly|Revision) ?#?)\s+:\s+(.*)$/ &&
 			ProcessHistory("INVENTORY","keysort","A0$2", "!Inventory: $1: $4\n") && next;
-    }
+	}
 	ProcessHistory("INVENTORY","","","!\n");
-    return(0);
+	return(0);
 }
 
 
@@ -347,7 +347,7 @@ sub ShowPacketCapture {
 	my $capture_type = "";
 	my $capture_found = 0;
 
-    while (<$INPUT>) {
+	while (<$INPUT>) {
 		tr/\015//d;
 		last if (/^$prompt/);
 		return(1) if (/^\s*($cmd|\^)\s*$/);
@@ -364,10 +364,10 @@ sub ShowPacketCapture {
 			($capture_type = "Datapath") && next;
 		/^(.*)\s+Enabled\s+(.*)$/ &&
 			ProcessHistory("CAPTURE","","","!Capture: $capture_type $1: $2\n") && next;
-        $capture_found = 1
-    }
+        	$capture_found = 1
+	}
 	($capture_found) && ProcessHistory("CAPTURE","","","!\n");
-    return(0);
+	return(0);
 }
 
 # Utility routine for turning "GE0/0/1-2 GE0/0/0" into "GE0/0/0 GE0/0/1 GE0/0/2"
@@ -401,7 +401,7 @@ sub ShowVLAN {
 	my @vlan_ports;
 	my ($len, $has_aaa) = 0;
 
-    while (<$INPUT>) {
+	while (<$INPUT>) {
 		tr/\015//d;
 		last if (/^$prompt/);
 		return(1) if (/^\s*($cmd|\^)\s*$/);
@@ -454,7 +454,7 @@ sub ShowVLAN {
 			next;
 		}
 		
-    }
+	}   
 	ProcessHistory("COMMENTS","","","!\n");
 	return(0);
 }
@@ -598,9 +598,9 @@ sub WriteTerm {
 			$found_end = 1;
 			return(0);
 		}
-    }
+	}
 
-    return(0);
+	return(0);
 }
 
 1;
