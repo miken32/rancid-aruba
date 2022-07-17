@@ -1,7 +1,7 @@
 # rancid-aruba
 *A Perl module for Aruba devices in RANCID*
 
-This is a proof of concept, tested so far on a very limited number of devices (6000 and 7210 wireless controllers on ArubaOS 6.3 and 6.4; and S1500 and S2500 switches on ArubaOS 7.1 and 7.2) with a very specific configuration (i.e. mine!) 
+This is a proof of concept, tested on a limited number of legacy Aruba devices (namely 6000 and 7210 wireless controllers running ArubaOS 6.3 and 6.4; and S1500 and S2500 switches running ArubaOS 7.1 and 7.2.) Modern Aruba-branded switches are derived from HPE's ProVision switch line, and should be considered HP switches for the purposes of RANCID.
 
 Install `aruba.pm` into your Perl module directory – in my Scientific Linux install it's at `/usr/share/perl5/vendor_perl/rancid/`.
 
