@@ -469,6 +469,8 @@ sub WriteTerm {
 
 	while (<$INPUT>) {
 		tr/\015//d;
+		# strip trailing whitespace
+		s/ $//;
 		last if (/^$prompt/);
 		return(1) if (/^\s*($cmd|\^)\s*$/);
 		return(1) if (/invalid input detected/i);
@@ -515,33 +517,33 @@ sub WriteTerm {
 
 		if ($filter_pwds >= 2 || $filter_osc >= 1) {
 			#within aaa-server details
-			/^(\s+key )[0-9a-f]{16,}/ &&
+			/^(\s*key )[0-9a-f]{16,}/ &&
 				ProcessHistory("","","","!$1<removed>\n") && next;
 		}
 
 		if ($filter_pwds >= 1 || $filter_osc >= 1) {
 			#removing only reversible passwords
-			/^(\s+wpa-passphrase )/ &&
+			/^(\s*wpa-passphrase )/ &&
 				ProcessHistory("","","","!$1<removed>\n") && next;
 
 			#not editable, but we'll treat it like a password
-			/^(\s+arm-rf-domain-key )/ &&
+			/^(\s*arm-rf-domain-key )/ &&
 				ProcessHistory("","","","!$1<removed>\n") && next;
 
 			#within redundancy-master settings
-			/^(\s+peer-ip-address \S+ ipsec )/ &&
+			/^(\s*peer-ip-address \S+ ipsec )/ &&
 				ProcessHistory("","","","!$1<removed>\n") && next;
 
 			#within vrrp
-			/^(\s+authentication )/ &&
+			/^(\s*authentication )/ &&
 				ProcessHistory("","","","!$1<removed>\n") && next;
-			/^(\s+vrrp-id \d+ vrrp-passphrase )/ &&
+			/^(\s*vrrp-id \d+ vrrp-passphrase )/ &&
 				ProcessHistory("","","","!$1<removed>\n") && next;
 
 			#AP console passwords
-			/^(\s+ap-console-password )/ &&
+			/^(\s*ap-console-password )/ &&
 				ProcessHistory("","","","!$1<removed>\n") && next;
-			/^(\s+bkup-passwords )/ &&
+			/^(\s*bkup-passwords )/ &&
 				ProcessHistory("","","","!$1<removed>\n") && next;
 
 			#stored in plain text!
@@ -560,11 +562,19 @@ sub WriteTerm {
 				ProcessHistory("","","","!$1<removed>\n") && next;
 
 			#clearpass radius
-			/^(\s+cppm username \S+ password )\S+/ &&
+			/^(\s*cppm username \S+ password )\S+/ &&
 				ProcessHistory("","","","!$1<removed>\n") && next;
 
 			# upgrade-profile
-			/^(\s+password )\S+/ &&
+			/^(\s*password )\S+/ &&
+				ProcessHistory("","","","!$1<removed>\n") && next;
+
+			# dump-collection-profile
+			/^(\s*server-password )\S+/ &&
+				ProcessHistory("","","","!$1<removed>\n") && next;
+
+			# ifmap cppm
+			/^(\s*server host \S+ port \S+ username \S+ passwd )\S+/ &&
 				ProcessHistory("","","","!$1<removed>\n") && next;
 		}
 
