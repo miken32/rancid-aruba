@@ -469,8 +469,8 @@ sub WriteTerm {
 
 	while (<$INPUT>) {
 		tr/\015//d;
-		# strip trailing whitespace
-		s/ $//;
+		# strip trailing spaces
+		s/ +$//;
 		last if (/^$prompt/);
 		return(1) if (/^\s*($cmd|\^)\s*$/);
 		return(1) if (/invalid input detected/i);
