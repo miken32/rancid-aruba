@@ -590,7 +590,7 @@ sub WriteTerm {
 				ProcessHistory("","","","$1 <removed>\n") && next;
 
 			/^(snmp-server host (\d+\.\d+\.\d+\.\d+) version [1-3]c? )\S+(.*)?$/ &&
-				ProcessHistory("SNMPSERVERHOST","ipsort","$2","!$1<removed>$2\n") && next;
+				ProcessHistory("SNMPSERVERHOST","ipsort","$2","!$1<removed>$3\n") && next;
 		} else {
 			/^snmp-server host (\d+\.\d+\.\d+\.\d+)/ &&
 				ProcessHistory("SNMPSERVERHOST","ipsort","$1","$_") && next;
